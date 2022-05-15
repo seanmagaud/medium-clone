@@ -1,32 +1,44 @@
-import { BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { hash } from 'bcrypt';
-import { ArticleEntity } from "@app/article/article.entity";
+import { ArticleEntity } from '@app/article/article.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
-    
-    @Column()
-    username: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({default: ''})
-    bio: string;
+  @Column()
+  username: string;
 
-    @Column({default: ''})
-    image: string;
+  @Column({
+    default: '',
+  })
+  bio: string;
 
-    @Column()
-    email: string;
-    
-    @Column({ select: false }) // step 1 good practice to hide the column on return response
-    password: string;
+  @Column({
+    default: '',
+  })
+  image: string;
 
-    @BeforeInsert()
-    async hashPassword() {
-        this.password = await hash(this.password, 10)
-    }
+  @Column()
+  email: string;
 
-    @OneToMany(() => ArticleEntity, (article) => article.author)
-    articles: ArticleEntity[];
+  @Column({
+    select: false,
+  }) // step 1 good practice to hide the column on return response
+  password: string;
+
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await hash(this.password, 10);
+  }
+
+  @OneToMany(() => ArticleEntity, (article) => article.author)
+  articles: ArticleEntity[];
 }
